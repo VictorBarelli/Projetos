@@ -1,0 +1,47 @@
+def calcular_aliquota_ir(dias_aplicados):
+    if dias_aplicados <= 180:
+        return 22.5
+    elif dias_aplicados <= 360:
+        return 20.0
+    elif dias_aplicados <= 720:
+        return 17.5
+    else:
+        return 15.0
+
+
+def calcular_imposto_resgate(valor_resgate, dias_aplicados):
+    aliquota = calcular_aliquota_ir(dias_aplicados)
+    valor_imposto = valor_resgate * (aliquota / 100)
+    return aliquota, valor_imposto
+
+
+def main():
+    print("Tipos de investimento:")
+    print("1 - CDB (Certificado de Depósito Bancário)")
+    print("2 - LCI (Letra de Crédito Imobiliário)")
+    print("3 - LCA (Letra de Crédito do Agronegócio)")
+
+    tipo_investimento = int(input("Informe o tipo de investimento (1, 2 ou 3): "))
+
+    if tipo_investimento not in [1, 2, 3]:
+        print("Tipo de investimento inválido.")
+        return
+
+    valor_resgate = float(input("Informe o valor do resgate: R$ "))
+    dias_aplicados = int(input("Informe o número de dias que o valor permaneceu aplicado: "))
+
+    if tipo_investimento == 1:  # CDB
+        aliquota, valor_imposto = calcular_imposto_resgate(valor_resgate, dias_aplicados)
+        print(f"Alíquota de IR: {aliquota}%")
+        print(f"Valor do imposto a ser pago: R$ {valor_imposto:.2f}")
+    else:  # LCI e LCA
+        print("Este tipo de investimento é isento de imposto de renda.")
+        aliquota = 0
+        valor_imposto = 0
+
+    print(f"Valor do resgate: R$ {valor_resgate:.2f}")
+    print(f"Valor do imposto: R$ {valor_imposto:.2f}")
+
+
+if __name__ == "__main__":
+    main()
