@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro e Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <!-- Aba de navegação -->
+                <ul class="nav nav-tabs mt-5" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Login</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="cadastro-tab" data-toggle="tab" href="#cadastro" role="tab" aria-controls="cadastro" aria-selected="false">Cadastro</a>
+                    </li>
+                    <li class="nav-item" role="presentation" id="dashboard-tab" style="display: none;">
+                        <a class="nav-link" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
+                    </li>
+                </ul>
+
+                <!-- Conteúdo das abas -->
+                <div class="tab-content" id="myTabContent">
+                    <!-- Tela de Login -->
+                    <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h2 class="card-title text-center">Login</h2>
+                                <form id="login-form">
+                                    <div class="form-group">
+                                        <label for="login-email">E-mail:</label>
+                                        <input type="email" class="form-control" id="login-email" placeholder="Digite seu e-mail" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="login-password">Senha:</label>
+                                        <input type="password" class="form-control" id="login-password" placeholder="Digite sua senha" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                                    <div id="login-error" class="text-danger mt-2" style="display: none;">E-mail ou senha incorretos.</div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tela de Cadastro -->
+                    <div class="tab-pane fade" id="cadastro" role="tabpanel" aria-labelledby="cadastro-tab">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h2 class="card-title text-center">Cadastro</h2>
+                                <form id="register-form">
+                                    <div class="form-group">
+                                        <label for="name">Nome:</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Digite seu nome" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="register-email">E-mail:</label>
+                                        <input type="email" class="form-control" id="register-email" placeholder="Digite seu e-mail" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Telefone:</label>
+                                        <input type="tel" class="form-control" id="phone" placeholder="Digite seu telefone" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="register-password">Senha:</label>
+                                        <input type="password" class="form-control" id="register-password" placeholder="Digite sua senha" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+                                    <div id="register-success" class="text-success mt-2" style="display: none;">Cadastro realizado com sucesso!</div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tela de Dashboard -->
+                    <div class="tab-pane fade" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h2 class="card-title text-center">Dashboard</h2>
+                                <p>Bem-vindo ao seu dashboard!</p>
+                                <div class="card">
+                                    <div class="card-header">
+                                        Documentos Pendentes
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">Documento 1 <button class="btn btn-primary float-right">Assinar</button></li>
+                                        <li class="list-group-item">Documento 2 <button class="btn btn-primary float-right">Assinar</button></li>
+                                    </ul>
+                                </div>
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                        Documentos Assinados
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">Documento 3</li>
+                                        <li class="list-group-item">Documento 4</li>
+                                    </ul>
+                                </div>
+                                <button id="logout-button" class="btn btn-secondary btn-block mt-4">Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Função para registrar um novo usuário
+        function registerUser(event) {
+            event.preventDefault();
+
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('register-email').value;
+            var phone = document.getElementById('phone').value;
+            var password = document.getElementById('register-password').value;
+            var success = document.getElementById('register-success');
+
+            var users = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Verificar se o e-mail já está cadastrado
+            var existingUser = users.find(user => user.email === email);
+            if (existingUser) {
+                alert('E-mail já cadastrado!');
+                return false;
+            }
+
+            var newUser = {
+                name: name,
+                email: email,
+                phone: phone,
+                password: password
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            success.style.display = 'block';
+            return true;
+        }
+
+        // Função para validar o login
+        function validateLogin(event) {
+            event.preventDefault();
+
+            var email = document.getElementById('login-email').value;
+            var password = document.getElementById('login-password').value;
+            var error = document.getElementById('login-error');
+
+            var users = JSON.parse(localStorage.getItem('users')) || [];
+
+            var validUser = users.find(user => user.email === email && user.password === password);
+
+            if (validUser) {
+                // Login bem-sucedido: mostrar dashboard
+                $('.nav-tabs .nav-link[href="#dashboard"]').tab('show');
+                document.getElementById('dashboard-tab').style.display = 'block';
+                error.style.display = 'none';
+            } else {
+                // Login falhou: exibir mensagem de erro
+                error.style.display = 'block';
+            }
+        }
+
+        // Função para fazer logout
+        function logout() {
+            // Voltar para a aba de login
+            $('.nav-tabs .nav-link[href="#login"]').tab('show');
+            document.getElementById('dashboard-tab').style.display = 'none';
+        }
+
+        // Adicionar eventos aos formulários
+        document.querySelector('#register-form').addEventListener('submit', registerUser);
+        document.querySelector('#login-form').addEventListener('submit', validateLogin);
+        document.querySelector('#logout-button').addEventListener('click', logout);
+    </script>
+</body>
+</html>
